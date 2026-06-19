@@ -27,12 +27,20 @@ start_background_services() {
         python3 -m http.server 8000 --directory /root/ > /dev/null 2>&1 &
         sleep 1
     fi
+
+    # 3. Start/restart the local HTTP mirror web server on port 7000 if not running
+    if ! pgrep -f "http.server 7000" > /dev/null; then
+        echo -e "${YELLOW}🌐 Starting background HTTP mirror web server on port 7000...${RESET}"
+        python3 -m http.server 7000 --directory /root/ > /dev/null 2>&1 &
+        sleep 1
+    fi
 }
 
 stop_background_services() {
     echo -e "${RED}🛑 Stopping all background Lovetunnel Gateway services securely...${RESET}"
     pkill -f arduino_uno_q_telemetry.py || true
     pkill -f "http.server 8000" || true
+    pkill -f "http.server 7000" || true
     echo -e "${GREEN}✅ All background processes terminated cleanly.${RESET}"
 }
 
@@ -43,7 +51,7 @@ show_header() {
     echo -e "${PURPLE}================================================================================${RESET}"
     echo -e " Sändarnod     : v-P142 (Intel Celeron N5095 - ${GREEN}FULLT OPTIMERAD${RESET})"
     echo -e " GCS Målhink   : gs://securai-a165b-safe-storage (Google Cloud)"
-    echo -e " Webbportal    : http://localhost:8000 (syntaxheart.net Tunnel ready)"
+    echo -e " Webbportal    : http://localhost:8000 (Mirror: http://localhost:7000)"
     echo -e " Kryptering    : AES-GCM-512 with Futhark Signature (Key Active)"
     
     # Check background statuses
@@ -54,9 +62,15 @@ show_header() {
     fi
 
     if pgrep -f "http.server 8000" > /dev/null; then
-        echo -e " Webbyta       : ${GREEN}ONLINE (Port 8000 - Auto-Updates Active)${RESET}"
+        echo -e " Webbyta (Main): ${GREEN}ONLINE (Port 8000 - Auto-Updates Active)${RESET}"
     else
-        echo -e " Webbyta       : ${RED}OFFLINE${RESET}"
+        echo -e " Webbyta (Main): ${RED}OFFLINE${RESET}"
+    fi
+
+    if pgrep -f "http.server 7000" > /dev/null; then
+        echo -e " Webbyta (Mirror): ${GREEN}ONLINE (Port 7000 - Live Mirror Active)${RESET}"
+    else
+        echo -e " Webbyta (Mirror): ${RED}OFFLINE${RESET}"
     fi
     echo -e "${PURPLE}--------------------------------------------------------------------------------${RESET}"
 }
