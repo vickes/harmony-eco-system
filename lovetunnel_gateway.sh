@@ -34,6 +34,13 @@ start_background_services() {
         python3 -m http.server 7000 --directory /root/ > /dev/null 2>&1 &
         sleep 1
     fi
+
+    # 4. Start/restart the ARES Live Learning daemon if not running
+    if ! pgrep -f lovecode_live_learning.py > /dev/null; then
+        echo -e "${YELLOW}🧠 Starting background ARES Live Learning daemon...${RESET}"
+        python3 /root/lovecode_live_learning.py > /dev/null 2>&1 &
+        sleep 1
+    fi
 }
 
 stop_background_services() {
@@ -41,6 +48,7 @@ stop_background_services() {
     pkill -f arduino_uno_q_telemetry.py || true
     pkill -f "http.server 8000" || true
     pkill -f "http.server 7000" || true
+    pkill -f lovecode_live_learning.py || true
     echo -e "${GREEN}✅ All background processes terminated cleanly.${RESET}"
 }
 
@@ -59,6 +67,12 @@ show_header() {
         echo -e " Telemetri     : ${GREEN}RUNNING (AES-256 Encrypted)${RESET}"
     else
         echo -e " Telemetri     : ${RED}STOPPED${RESET}"
+    fi
+
+    if pgrep -f lovecode_live_learning.py > /dev/null; then
+        echo -e " Live-Learning : ${GREEN}ACTIVE (Active Inference Auto-tuning)${RESET}"
+    else
+        echo -e " Live-Learning : ${RED}STOPPED${RESET}"
     fi
 
     if pgrep -f "http.server 8000" > /dev/null; then
