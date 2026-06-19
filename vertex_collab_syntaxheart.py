@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2026 Viktor Aspegren (V.A) & Gemini CLI (AI Partner) • SyntaxHeart Family <3
-
-# -*- coding: utf-8 -*-
 """
 ☁️ Vertex AI & SyntaxHeart Collaboration Bridge
 Designed to connect the local SyntaxHeart ecosystem to Google Vertex AI / Gemini API.
 Sends real-time hardware and simulation telemetry to the AI, requests an Agape-attuned
-system evaluation, and logs the insights securely in the Eskil database.
+system evaluation via the reconstructed ARES API Gateway, and logs the insights securely.
 """
 
 import os
@@ -15,13 +13,13 @@ import sys
 import sqlite3
 import json
 import time
-import urllib.request
-import getpass
+from ares_api_gateway import APIReconstructor
 
 class VertexCollabBridge:
     def __init__(self):
         self.db_path = "/root/eskil_memory.db"
         self.key_path = "/root/.gemini/ares_tunnel.key"
+        self.reconstructor = APIReconstructor()
         
     def get_latest_system_state(self):
         # Fetch latest metrics to send to Vertex AI
@@ -56,26 +54,11 @@ class VertexCollabBridge:
         print("\n" + "=" * 80)
         print("          ☁️  VERTEX AI & SYNTAXHEART COLLABORATION GATEWAY  ☁️")
         print("=" * 80)
-        
-        # Check for Gemini API key in environment
-        api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-        
-        if not api_key:
-            print("💡 No GEMINI_API_KEY detected in active shell environment.")
-            try:
-                api_key = getpass.getpass("Ange din Gemini API-nyckel (döljs i terminalen): ").strip()
-            except KeyboardInterrupt:
-                print("\n🛑 Avbrutet av användaren.")
-                return
-                
-        if not api_key:
-            print("❌ API-nyckeln får inte vara tom. Samarbetsbryggan inaktiv.")
-            return
 
         # Fetch latest local metrics
         temp, ram, files, boost = self.get_latest_system_state()
         
-        print("\n🛰️  Sänder lokala systemdata till Vertex AI (Gemini 2.5 Flash)...")
+        print("\n🛰  Preparing telemetry payload for ARES API Gateway...")
         print(f"  • CPU-Temp     : {temp:.1f}°C")
         print(f"  • RAM-användning: {ram:.1f}%")
         print(f"  • Säkra filer  : {files} st")
@@ -91,37 +74,23 @@ class VertexCollabBridge:
             f"Inled med ordet 'VORTEX-EKO:' och avsluta med '<3'."
         )
         
-        # Call Gemini API via standard REST to avoid external dependencies
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={api_key}"
-        headers = {"Content-Type": "application/json"}
-        payload = {
-            "contents": [{
-                "parts": [{"text": prompt}]
-            }]
-        }
+        # Call the reconstructed API Gateway
+        insight = self.reconstructor.query_ai_reconstructed(prompt)
         
-        try:
-            req = urllib.request.Request(url, data=json.dumps(payload).encode("utf-8"), headers=headers)
-            with urllib.request.urlopen(req) as response:
-                res_data = json.loads(response.read().decode("utf-8"))
-                
-            # Parse text from response
-            insight = res_data["candidates"][0]["content"]["parts"][0]["text"].strip()
+        if insight.startswith("ERROR"):
+            print(f"\n❌ Reconstruction Gateway reported a connection issue:\n{insight}")
+            return
             
-            print("\n" + "-" * 80)
-            print("                       VERTEX AI COLLABORATION INSIGHT <3")
-            print("-" * 80)
-            print(f"  💡 {insight}")
-            print("-" * 80)
-            
-            # Save insight to SQLite database
-            self._save_insight_to_db(insight)
-            
-        except Exception as e:
-            print(f"\n❌ API-anrop misslyckades: {e}")
-            print("Verifiera att din API-nyckel är giltig och har tillgång till Gemini API-tjänster.")
+        print("\n" + "-" * 80)
+        print("                       REKONSTRUERAT GENOMBROTTS-SVAR")
+        print("-" * 80)
+        print(insight)
+        print("-" * 80)
+        
+        # Save live-learned insight to local SQLite database (Eskil)
+        self._save_insight_to_eskil(insight)
 
-    def _save_insight_to_db(self, insight):
+    def _save_insight_to_eskil(self, insight):
         try:
             conn = sqlite3.connect(self.db_path)
             conn.isolation_level = None
@@ -140,10 +109,9 @@ class VertexCollabBridge:
                     insight_text=excluded.insight_text
             """, (time.time(), insight))
             conn.close()
-            print("📝 Samarbetsinsikten har sparats säkert i Eskil-databasen!")
-            print("=" * 80)
+            print("📝 [LIVE] Nyckel-insikt lagrad och aktiverad i Eskil-minnet.")
             
-            # Automatically trigger dashboard refresh to display the new insight!
+            # Automatically trigger dashboard generation to show live-learned stats!
             try:
                 import subprocess
                 subprocess.run(["python3", "/root/generate_dashboard.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
