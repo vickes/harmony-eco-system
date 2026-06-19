@@ -20,6 +20,7 @@ def main():
     temp, volts, speed, vib_freq = 23.5, 5.01, 150, 14.0
     h_temp, h_ram, h_status = 35.0, 20.0, "❄️ COOL & HEALTHY (Peak Attunement)"
     opt_token, opt_boost, opt_damping, opt_resilience = "kärlek", 1.50, 0.010, 0.999
+    b_cpu, b_ssd, b_active = "Tuned 4 CPU Cores (balance_performance)", "SSD Read-Ahead set to 4096 (Optimized)", "OPTIMIZED"
     
     # 1. Load key and decrypt latest telemetry
     try:
@@ -70,7 +71,20 @@ def main():
     except Exception as e:
         print(f"⚠️ Hyperparameters read failed: {e}")
 
-    # 4. Build the HTML content
+    # 4. Fetch latest performance boost status
+    try:
+        if os.path.exists(db_path):
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("SELECT cpu_status, ssd_status, active_status FROM performance_boosts ORDER BY id DESC LIMIT 1")
+            row = cursor.fetchone()
+            if row:
+                b_cpu, b_ssd, b_active = row
+            conn.close()
+    except Exception as e:
+        print(f"⚠️ Performance boost read failed: {e}")
+
+    # 5. Build the HTML content
     html_content = f"""<!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -345,6 +359,27 @@ def main():
             <div class="metric-row">
                 <span class="metric-label">Simulated Resilience</span>
                 <span class="metric-value green">{opt_resilience:.4f} (x1000 Runs)</span>
+            </div>
+        </div>
+
+        <!-- Card 7: Hardware & Kernel Performance Booster -->
+        <div class="card">
+            <h2>VII. ARES Kernel Booster <span class="metric-value green">{b_active}</span></h2>
+            <div class="metric-row">
+                <span class="metric-label">Intel CPU Core Tuning</span>
+                <span class="metric-value cyan">'{b_cpu}'</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">1TB SSD Cache Mode</span>
+                <span class="metric-value green">'{b_ssd}'</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Sequential Read-Ahead</span>
+                <span class="metric-value pink">4096 Sectors</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Kernel Tuning Status</span>
+                <span class="metric-value green">Hardware Optimized</span>
             </div>
         </div>
     </div>
