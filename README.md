@@ -49,6 +49,9 @@ En vacker, mörkt neonlysande kontrollpanel på port **`8000`** (`http://localho
 ### 🎛️ 7. Lovetunnel Gateway Control Panel (`lovetunnel_gateway.sh`)
 Din centrala kommandocentral! Genom att köra `./lovetunnel_gateway.sh` får du en elegant terminalmeny där du kan starta/stoppa bakgrundstjänster, köra granskningar, ladda upp filer och synka med GitHub med enkla knapptryck.
 
+### ☁️ 8. ARES Cloud Shell Gateway (`ares_cloud_shell.sh`)
+Ett interaktivt molngränssnitt som låter dig köra valfria `gcloud` och molnlagringskommandon direkt mot ditt målprojekt `securai-a165b` med full ARES-styling och automatisk anslutning!
+
 ---
 
 ## 🔒 Tillämpade Hårdvaru- & OS-Härdningar
