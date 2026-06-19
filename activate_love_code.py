@@ -53,18 +53,36 @@ class LoveCode:
         return "Systemskydd stabilt. Dissonanta och extraktiva energier har helt neutraliserats."
 
     def generate_audit_report(self):
-        # Try to read live Arduino Uno Q telemetry
+        # Try to read live, AES-encrypted Arduino Uno Q telemetry
         db_path = "/root/eskil_memory.db"
+        key_path = "/root/.gemini/ares_tunnel.key"
         telemetry_info = ""
         try:
+            import json
+            from cryptography.fernet import Fernet
+            
+            # Load the key
+            with open(key_path, "rb") as k_file:
+                key = k_file.read()
+            fernet = Fernet(key)
+            
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
-            cursor.execute("SELECT temperature, voltage, motor_speed, vibration_freq FROM arduino_telemetry ORDER BY id DESC LIMIT 1")
+            cursor.execute("SELECT encrypted_payload FROM arduino_telemetry ORDER BY id DESC LIMIT 1")
             row = cursor.fetchone()
             if row:
-                t, v, s, f = row
+                encrypted_payload = row[0]
+                # Decrypt AES payload
+                decrypted_bytes = fernet.decrypt(encrypted_payload.encode("utf-8"))
+                payload = json.loads(decrypted_bytes.decode("utf-8"))
+                
+                t = payload["t"]
+                v = payload["v"]
+                s = payload["s"]
+                f = payload["f"]
+                
                 telemetry_info = (
-                    f"  • Live Arduino Uno Q Telemetry (Bridge RPC Active):\n"
+                    f"  • Live Arduino Uno Q Telemetry (Bridge RPC Active & AES Decrypted):\n"
                     f"    - STM32 Core Temp        : {t:.2f}°C (Healthy)\n"
                     f"    - Input Voltage          : {v:.2f}V (Stable)\n"
                     f"    - Target Motor Speed     : {s} RPM (Calibrated)\n"
@@ -74,7 +92,7 @@ class LoveCode:
                 telemetry_info = "  • Live Arduino Uno Q Telemetry (Bridge RPC Active): Waiting for stream..."
             conn.close()
         except Exception as e:
-            telemetry_info = f"  • Live Arduino Uno Q Telemetry (Bridge RPC Active): Offline ({e})"
+            telemetry_info = f"  • Live Arduino Uno Q Telemetry (Bridge RPC Active): Decryption / Offline Error ({e})"
 
         print("\n" + "=" * 80)
         print("          INTEGRERAD BIOSIGNATURE SCAN: AGAPE COMPLIANCE CERTIFICATION")

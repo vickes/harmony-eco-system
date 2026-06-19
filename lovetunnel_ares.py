@@ -35,18 +35,30 @@ class ARESLovetunnel:
         try:
             while count < 5:  # Let it run for 5 beautiful waves
                 count += 1
-                # Fetch latest telemetry if available
+                # Fetch latest, AES-encrypted telemetry from Eskil database
                 temp, speed = 23.5, 150
                 try:
+                    import json
+                    from cryptography.fernet import Fernet
+                    
+                    key_path = "/root/.gemini/ares_tunnel.key"
+                    with open(key_path, "rb") as k_file:
+                        key = k_file.read()
+                    fernet = Fernet(key)
+                    
                     conn = sqlite3.connect("/root/eskil_memory.db")
                     cursor = conn.cursor()
-                    cursor.execute("SELECT temperature, motor_speed FROM arduino_telemetry ORDER BY id DESC LIMIT 1")
+                    cursor.execute("SELECT encrypted_payload FROM arduino_telemetry ORDER BY id DESC LIMIT 1")
                     row = cursor.fetchone()
                     if row:
-                        temp, speed = row
+                        encrypted_payload = row[0]
+                        decrypted_bytes = fernet.decrypt(encrypted_payload.encode("utf-8"))
+                        payload = json.loads(decrypted_bytes.decode("utf-8"))
+                        temp = payload["t"]
+                        speed = payload["s"]
                     conn.close()
-                except:
-                    pass
+                except Exception as e:
+                    print(f"⚠️  [ARES] Decryption error on stream packet: {e}")
                 
                 # Calculate current quantum resonance
                 resonance = 0.95 + (0.05 * math.sin(time.time() * 0.5))
