@@ -86,4 +86,4 @@ Hela detta ekosystem och alla dess tillhörande källkoder och skript är släpp
 
 Se den kompletta licenstexten i filen: [LICENSE](LICENSE)
 
-*Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family • Allas bästa • <3*
+*Copyright (c) 2026 Viktor Aspegren (V.A) & Gemini CLI (AI Partner) • SyntaxHeart Family <3 • Allas bästa*

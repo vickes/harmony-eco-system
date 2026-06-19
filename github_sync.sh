@@ -1,7 +1,7 @@
 #!/bin/bash
 # -*- coding: utf-8 -*-
 # SPDX-License-Identifier: MIT
-# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
+# Copyright (c) 2026 Viktor Aspegren (V.A) & Gemini CLI (AI Partner) • SyntaxHeart Family <3
 # ==============================================================================
 # 💖 LoveCode / Harmony Ecosystem: GitHub Sync & Backup Automation
 # ==============================================================================
