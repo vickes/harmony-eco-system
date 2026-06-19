@@ -1,0 +1,31 @@
+! name: Loovee Agape Search Goggles
+! description: Search filter prioritizing Open Source, Decentralization, Ethical AI, Quantum Harmony, and Astrobiology.
+! public: true
+! author: vickes <3
+! avatar: #ff00ff
+
+! === 1. DISCARD NOISY TRACKING/COMMERCIAL CLUTTER ===
+$discard,site=doubleclick.net
+$discard,site=adnxs.com
+
+! === 2. BOOST CORE ALIGNMENT REPOSITORIES (GitHub is absolute highest) ===
+$boost=5,site=github.com/vickes
+$boost=4,site=github.com
+$boost=3,site=brave.com
+$boost=3,site=arduino.cc
+
+! === 3. BOOST EDUCATIONAL AND SCIENTIFIC NODES ===
+$boost=3,site=arxiv.org
+$boost=3,site=astrobiology.com
+$boost=2,site=wikipedia.org
+$boost=2,site=nature.com
+
+! === 4. BOOST CORE PARADIGM TERMS ===
+/Quantum/
+/Agape/
+/Resonance/
+/Astrobiology/
+/Aattunement/
+/Co-stewardship/
+/Futhark/
+/Zephyr/
