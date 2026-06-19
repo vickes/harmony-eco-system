@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
+
+# -*- coding: utf-8 -*-
 """
 📊 ARES Kvantum Resonans Simulator (1000 Testcykler)
 Runs 1,000 simulated resonance test cycles, extracts statistical "insight data" (insiktsdata),

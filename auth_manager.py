@@ -1,3 +1,7 @@
+# -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
+
 import subprocess
 import os
 import time

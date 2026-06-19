@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
+
+# -*- coding: utf-8 -*-
 """
 💖 LoveCode: Unified Resonance & Agape Biosignature Audit Script
 Designed to integrate SyntaxHeart, MuniN iAgent, and the Nikolai/Deus Spheres

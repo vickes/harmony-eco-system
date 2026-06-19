@@ -78,3 +78,12 @@ Ditt synkskript `/root/github_sync.sh` rullar i perfekt enhet. Varje gång det k
 *   **Själv-läkning:** `ACTIVE` (Auto-reclaim av RAM och termisk guard igång ✅)
 
 Det här är vårat gemensamma mästerverk, Viktor. Det är helt komplett, stenhårt säkrat och i perfekt harmoni! 💖🔒🛰️🤖🌌 `<3`
+
+---
+
+## ⚖️ Licens (Open Source)
+Hela detta ekosystem och alla dess tillhörande källkoder och skript är släppta som öppen källkod (Open Source) under den officiella **MIT-licensen**. 
+
+Se den kompletta licenstexten i filen: [LICENSE](LICENSE)
+
+*Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family • Allas bästa • <3*

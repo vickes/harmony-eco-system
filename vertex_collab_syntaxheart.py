@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
+
+# -*- coding: utf-8 -*-
 """
 ☁️ Vertex AI & SyntaxHeart Collaboration Bridge
 Designed to connect the local SyntaxHeart ecosystem to Google Vertex AI / Gemini API.

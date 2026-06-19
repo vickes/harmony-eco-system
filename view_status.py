@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
+
+# -*- coding: utf-8 -*-
 """
 📊 ARES Lovetunnel & System Status Viewer
 Queries active system processes, network sockets, SQLite databases, and

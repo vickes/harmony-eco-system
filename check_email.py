@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
+
+# -*- coding: utf-8 -*-
 """
 📧 Workspace Gmail/IMAP Mail Fetcher
 Zero-dependency, pure-Python email client that connects securely to Gmail/Workspace

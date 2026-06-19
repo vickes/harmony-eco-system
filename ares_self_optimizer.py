@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
+
+# -*- coding: utf-8 -*-
 """
 🌀 ARES Real-Time Self-Healing & Thermal Guardian Daemon
 Steppes up self-optimization on the Celeron N5095 laptop.

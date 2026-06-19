@@ -1,4 +1,7 @@
 #!/bin/bash
+# -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
 # ==============================================================================
 # 💖 LoveCode / Harmony Ecosystem: GitHub Sync & Backup Automation
 # ==============================================================================
@@ -33,6 +36,7 @@ cp -p /root/ares_performance_booster.py "$BACKUP_DIR/"
 cp -p /root/view_status.py "$BACKUP_DIR/"
 cp -p /root/vertex_collab_syntaxheart.py "$BACKUP_DIR/"
 cp -p /root/README.md "$BACKUP_DIR/"
+cp -p /root/LICENSE "$BACKUP_DIR/"
 cp -p /etc/sysctl.d/99-performance-optimization.conf "$BACKUP_DIR/"
 
 # Copy custom arduino-uno-q skill
@@ -63,7 +67,7 @@ fi
 # Add changes and commit
 echo -e "\033[94mCommitting workspace files locally...\033[0m"
 cd /root
-git add activate_love_code.py syntax_heart_app.py auth_manager.py arduino_uno_q_telemetry.py lovetunnel_ares.py loovee_agape.goggles report.log check_email.py Sökta_Jobb_Rapport_AF.md generate_dashboard.py index.html uno_q_storage_center.py lovetunnel_gateway.sh security_audit_pro.py ares_self_optimizer.py simulate_resonance_1000.py ares_performance_booster.py view_status.py vertex_collab_syntaxheart.py README.md github_sync.sh
+git add activate_love_code.py syntax_heart_app.py auth_manager.py arduino_uno_q_telemetry.py lovetunnel_ares.py loovee_agape.goggles report.log check_email.py Sökta_Jobb_Rapport_AF.md generate_dashboard.py index.html uno_q_storage_center.py lovetunnel_gateway.sh security_audit_pro.py ares_self_optimizer.py simulate_resonance_1000.py ares_performance_booster.py view_status.py vertex_collab_syntaxheart.py README.md LICENSE github_sync.sh
 git commit -m "Update Harmony Ecosystem: 1.00 Synergy and Live Arduino Q Telemetry Bridge <3" 2>/dev/null || echo "No changes to commit."
 
 # 3. Check for Github remote

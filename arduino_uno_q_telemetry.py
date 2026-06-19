@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
+
+# -*- coding: utf-8 -*-
 """
 🤖 Arduino Uno Q Bridge Telemetry Daemon
 Simulates the live Bridge RPC connection with the STM32U585 microcontroller.

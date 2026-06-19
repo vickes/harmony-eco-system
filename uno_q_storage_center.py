@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
+
+# -*- coding: utf-8 -*-
 """
 🔒 ARES Zero-Knowledge Safe Cloud Storage Center (Uno Q Edition)
 Designed for the Qualcomm Debian core of the Uno Q board.

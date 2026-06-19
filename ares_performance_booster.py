@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & SyntaxHeart Family
+
+# -*- coding: utf-8 -*-
 """
 🚀 ARES CPU Core & SSD Cache Optimizer Add-on
 An advanced kernel-level tuning script designed to boost the performance
