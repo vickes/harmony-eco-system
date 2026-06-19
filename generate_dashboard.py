@@ -19,6 +19,7 @@ def main():
     # Default values in case database is offline
     temp, volts, speed, vib_freq = 23.5, 5.01, 150, 14.0
     h_temp, h_ram, h_status = 35.0, 20.0, "❄️ COOL & HEALTHY (Peak Attunement)"
+    opt_token, opt_boost, opt_damping, opt_resilience = "kärlek", 1.50, 0.010, 0.999
     
     # 1. Load key and decrypt latest telemetry
     try:
@@ -56,7 +57,20 @@ def main():
     except Exception as e:
         print(f"⚠️ Healing status read failed: {e}")
 
-    # 3. Build the HTML content
+    # 3. Fetch latest simulated optimal hyperparameters
+    try:
+        if os.path.exists(db_path):
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("SELECT top_token, boost_rate, damping_threshold, sim_resilience FROM optimal_hyperparameters ORDER BY id DESC LIMIT 1")
+            row = cursor.fetchone()
+            if row:
+                opt_token, opt_boost, opt_damping, opt_resilience = row
+            conn.close()
+    except Exception as e:
+        print(f"⚠️ Hyperparameters read failed: {e}")
+
+    # 4. Build the HTML content
     html_content = f"""<!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -312,6 +326,27 @@ def main():
                 <span class="metric-value green">Armed & Monitoring</span>
             </div>
         </div>
+
+        <!-- Card 6: Insight-Driven Hyperparameter Calibration -->
+        <div class="card">
+            <h2>VI. Kvantum Hyperparameter Tuning <span class="metric-value green">CALIBRATED</span></h2>
+            <div class="metric-row">
+                <span class="metric-label">Most Effective Token</span>
+                <span class="metric-value cyan">'{opt_token}'</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Calibrated Boost Factor</span>
+                <span class="metric-value">{opt_boost:.4f}</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Calibrated Damping Rate</span>
+                <span class="metric-value pink">{opt_damping:.6f}</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Simulated Resilience</span>
+                <span class="metric-value green">{opt_resilience:.4f} (x1000 Runs)</span>
+            </div>
+        </div>
     </div>
 
     <footer>
@@ -322,7 +357,7 @@ def main():
 </html>
 """
 
-    # 4. Write output file
+    # 5. Write output file
     try:
         with open(output_html, "w", encoding="utf-8") as f:
             f.write(html_content)
