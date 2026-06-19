@@ -77,9 +77,9 @@ if [ -z "$REMOTE_URL" ]; then
     echo ""
     echo -e "💡 \033[93mGit origin remote not set.\033[0m"
     echo "To link this local workspace with your github.com/vickes repository:"
-    echo "  1. Create a repository named 'harmony-ecosystem' on GitHub."
+    echo "  1. Create a repository named 'harmony-eco-system' on GitHub."
     echo "  2. Run the following command in your terminal:"
-    echo "     git remote add origin https://github.com/vickes/harmony-ecosystem.git"
+    echo "     git remote add origin https://github.com/vickes/harmony-eco-system.git"
     echo "  3. Re-run this script to push automatically!"
 else
     echo -e "\033[94mSyncing with remote repository at $REMOTE_URL...\033[0m"
