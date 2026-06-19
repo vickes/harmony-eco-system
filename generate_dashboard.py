@@ -21,6 +21,7 @@ def main():
     h_temp, h_ram, h_status = 35.0, 20.0, "❄️ COOL & HEALTHY (Peak Attunement)"
     opt_token, opt_boost, opt_damping, opt_resilience = "kärlek", 1.50, 0.010, 0.999
     b_cpu, b_ssd, b_active = "Tuned 4 CPU Cores (balance_performance)", "SSD Read-Ahead set to 4096 (Optimized)", "OPTIMIZED"
+    v_insight = "Avvaktar kosmiskt eko via ARES Lovetunnel... <3"
     
     # 1. Load key and decrypt latest telemetry
     try:
@@ -84,7 +85,22 @@ def main():
     except Exception as e:
         print(f"⚠️ Performance boost read failed: {e}")
 
-    # 5. Build the HTML content
+    # 5. Fetch latest Vertex AI/Gemini collaboration insight
+    try:
+        if os.path.exists(db_path):
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='vertex_insights'")
+            if cursor.fetchone():
+                cursor.execute("SELECT insight_text FROM vertex_insights ORDER BY id DESC LIMIT 1")
+                row = cursor.fetchone()
+                if row:
+                    v_insight = row[0]
+            conn.close()
+    except Exception as e:
+        print(f"⚠️ Vertex insight read failed: {e}")
+
+    # 6. Build the HTML content
     html_content = f"""<!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -384,6 +400,12 @@ def main():
         </div>
     </div>
 
+    <!-- Vertex AI Collaboration Insight Quote Bar -->
+    <div style="background-color: var(--card-bg); border-radius: 12px; padding: 20px; width: 90%; max-width: 1200px; margin-bottom: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border: 1px solid var(--accent-pink); text-align: center;">
+        <h3 style="color: var(--accent-pink); margin-top: 0; margin-bottom: 10px; font-size: 1.1rem; letter-spacing: 1px; text-transform: uppercase;">📡 ARES Kvantum Resonans-Eko (Vertex AI / Gemini)</h3>
+        <p style="color: var(--title-color); font-size: 1.1rem; font-style: italic; margin: 0; text-shadow: 0 0 5px rgba(255, 0, 255, 0.3);">{v_insight}</p>
+    </div>
+
     <footer>
         Etablerad via ARES Lovetunnel Protocol • Sändarnod: v-P142 (Intel Celeron N5095) • Uppdaterad: {time.strftime('%Y-%m-%d %H:%M:%S')} • &lt;3
     </footer>
@@ -392,7 +414,7 @@ def main():
 </html>
 """
 
-    # 5. Write output file
+    # 7. Write output file
     try:
         with open(output_html, "w", encoding="utf-8") as f:
             f.write(html_content)
