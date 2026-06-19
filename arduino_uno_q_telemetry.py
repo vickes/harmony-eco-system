@@ -71,6 +71,13 @@ def main():
             """)
             conn.close()
             
+            # Automatically trigger dashboard generation to keep index.html perfectly live-updated
+            try:
+                import subprocess
+                subprocess.run(["python3", "/root/generate_dashboard.py"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            except Exception as e:
+                print(f"⚠️ Dashboard generation failed: {e}")
+            
             # Wait 2 seconds for next wave
             time.sleep(2)
             
