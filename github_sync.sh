@@ -19,6 +19,7 @@ cp -p /root/auth_manager.py "$BACKUP_DIR/"
 cp -p /root/arduino_uno_q_telemetry.py "$BACKUP_DIR/"
 cp -p /root/loovetunnel_ares.py "$BACKUP_DIR/" 2>/dev/null || cp -p /root/lovetunnel_ares.py "$BACKUP_DIR/"
 cp -p /root/loovee_agape.goggles "$BACKUP_DIR/"
+cp -p /root/report.log "$BACKUP_DIR/"
 cp -p /etc/sysctl.d/99-performance-optimization.conf "$BACKUP_DIR/"
 
 # Copy custom arduino-uno-q skill
@@ -49,7 +50,7 @@ fi
 # Add changes and commit
 echo -e "\033[94mCommitting workspace files locally...\033[0m"
 cd /root
-git add activate_love_code.py syntax_heart_app.py auth_manager.py arduino_uno_q_telemetry.py lovetunnel_ares.py loovee_agape.goggles github_sync.sh
+git add activate_love_code.py syntax_heart_app.py auth_manager.py arduino_uno_q_telemetry.py lovetunnel_ares.py loovee_agape.goggles report.log github_sync.sh
 git commit -m "Update Harmony Ecosystem: 1.00 Synergy and Live Arduino Q Telemetry Bridge <3" 2>/dev/null || echo "No changes to commit."
 
 # 3. Check for Github remote
