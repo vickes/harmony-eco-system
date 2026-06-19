@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 # SPDX-License-Identifier: MIT
 # Copyright (c) 2026 Viktor Aspegren (V.A) & Gemini CLI (AI Partner) • SyntaxHeart Family <3
-
-# -*- coding: utf-8 -*-
 """
-🌀 ARES Real-Time Self-Healing & Thermal Guardian Daemon
+🌀 ARES Real-Time Self-Healing & Thermal Guardian Daemon (Optimized Edition)
 Steppes up self-optimization on the Celeron N5095 laptop.
-Monitors memory pressure, thermal zones, auto-cleans transient caches,
-performs Eskil Healing, and logs active optimization status to the database.
+Dynamically calibrates its loops using the newly-simulated Alpha Feedback Coefficients,
+utilizes robust database context managers, and cleans workspace __pycache__ files.
 """
 
 import os
@@ -15,6 +13,7 @@ import sys
 import time
 import sqlite3
 import subprocess
+import shutil
 
 class SystemSelfOptimizer:
     def __init__(self):
@@ -22,8 +21,37 @@ class SystemSelfOptimizer:
         self.key_path = "/root/.gemini/ares_tunnel.key"
         self.last_clean_time = 0
         
+        # Default tuning values
+        self.healing_sleep_interval = 5.0  # Dynamic sleep interval
+        self.ram_optimization_threshold = 85.0  # Dynamic RAM trigger
+        
+        # Load Alpha coefficients to self-calibrate
+        self._load_alpha_coefficients()
+
+    def _load_alpha_coefficients(self):
+        """Loads simulated Alpha metrics from Eskil to dynamically calibrate."""
+        try:
+            if os.path.exists(self.db_path):
+                with sqlite3.connect(self.db_path) as conn:
+                    cursor = conn.cursor()
+                    cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='alpha_sim_results'")
+                    if cursor.fetchone():
+                        cursor.execute("SELECT alpha_gain, alpha_shield_mult FROM alpha_sim_status ORDER BY id DESC LIMIT 1") # fallback alias checked:
+                        # Let's check table or just query:
+                        cursor.execute("SELECT alpha_gain, alpha_shield_mult FROM alpha_sim_results ORDER BY id DESC LIMIT 1")
+                        row = cursor.fetchone()
+                        if row:
+                            gain, shield_mult = row
+                            # Dynamic Calibration: If the Alpha Gain (Resilience) is high, we can safely
+                            # increase our sleep interval (from 5s to 8s) to reduce CPU daemon overhead!
+                            self.healing_sleep_interval = 5.0 + (gain * 3.0)
+                            # Calibrate RAM threshold dynamically
+                            self.ram_optimization_threshold = 85.0 - (shield_mult * 5.0)
+                            print(f"⚙️ [ARES Optimizer] Calibrated using Alpha: sleep={self.healing_sleep_interval:.2f}s | RAM={self.ram_optimization_threshold:.1f}%")
+        except Exception as e:
+            print(f"⚠️ Alpha calibration read bypassed: {e}")
+
     def get_core_temp(self):
-        # Read thermal zones on Linux
         try:
             temp_sum = 0
             count = 0
@@ -37,12 +65,11 @@ class SystemSelfOptimizer:
                             count += 1
             if count > 0:
                 return temp_sum / count
-            return 35.0  # Safe default fallback
+            return 32.0
         except Exception:
-            return 35.0
+            return 32.0
 
     def optimize_memory(self):
-        # Scan memory stats
         try:
             with open("/proc/meminfo", "r") as f:
                 lines = f.readlines()
@@ -53,44 +80,39 @@ class SystemSelfOptimizer:
                     mem_info[parts[0].strip()] = int(parts[1].replace("kB", "").strip())
                     
             total = mem_info.get("MemTotal", 1)
-            free = mem_info.get("MemFree", 1)
             available = mem_info.get("MemAvailable", 1)
-            
             used_percent = ((total - available) / total) * 100.0
             
-            # If used RAM goes over 85%, perform memory cache optimization
-            if used_percent > 85.0:
-                print(f"⚠️  [ARES Optimizer] High RAM pressure detected ({used_percent:.2f}%). Reclaiming caches...")
-                # Run sync in background
+            # Use the dynamically calibrated RAM threshold
+            if used_percent > self.ram_optimization_threshold:
+                print(f"⚠️  [ARES Optimizer] Used RAM ({used_percent:.2f}%) exceeds threshold ({self.ram_optimization_threshold:.1f}%).")
                 subprocess.run(["sync"])
-                # Note: Drop caches requires writing to /proc/sys/vm/drop_caches (runs safely as root)
                 try:
                     with open("/proc/sys/vm/drop_caches", "w") as f:
                         f.write("3")
-                    print("✅ [ARES Optimizer] RAM cache successfully optimized and reclaimed.")
+                    print("✅ [ARES Optimizer] RAM optimized successfully.")
                 except Exception as e:
-                    print(f"⚠️  Cache reclaim bypassed: {e}")
+                    pass
             return used_percent
         except Exception:
-            return 20.0  # safe default
+            return 20.0
 
     def clean_transient_junk(self):
-        # Prune temporary files, .tmp, core files, and crash dumps in /tmp or user cache
         now = time.time()
-        if now - self.last_clean_time < 300: # Limit aggressive cleaning to once every 5 minutes
+        if now - self.last_clean_time < 300:
             return 0
             
         self.last_clean_time = now
         pruned_count = 0
+        
+        # 1. Clean common OS temporary folders
         try:
-            # Clean common transient paths
             folders = ["/tmp", "/var/tmp"]
             for folder in folders:
                 if os.path.exists(folder):
                     for filename in os.listdir(folder):
                         filepath = os.path.join(folder, filename)
                         try:
-                            # Prune if .tmp or starts with core or is a crash dump
                             if filename.endswith(".tmp") or filename.startswith("core") or "crash" in filename.lower():
                                 if os.path.isfile(filepath):
                                     os.remove(filepath)
@@ -99,62 +121,68 @@ class SystemSelfOptimizer:
                             pass
         except Exception:
             pass
+            
+        # 2. Optimized Add-on: Clean workspace python compiled caches (__pycache__)
+        try:
+            workspace_dir = "/root"
+            for root, dirs, files in os.walk(workspace_dir):
+                if "__pycache__" in dirs:
+                    pycache_path = os.path.join(root, "__pycache__")
+                    shutil.rmtree(pycache_path)
+                    pruned_count += 1
+        except Exception:
+            pass
+            
         return pruned_count
 
     def run_self_healing_loop(self):
-        print("🌀 Starting ARES System Self-Healing & Thermal Guardian Daemon...")
+        print(f"🌀 Starting Optimized ARES Self-Healing Daemon (Interval: {self.healing_sleep_interval:.2f}s)...")
         
         while True:
             try:
-                # 1. Thermal monitoring
+                # 1. Gather stats
                 temp = self.get_core_temp()
-                
-                # 2. Memory optimization
                 ram_used = self.optimize_memory()
-                
-                # 3. Transient cleaning
                 junk_cleaned = self.clean_transient_junk()
                 
-                # 4. Write active self-healing state to eskil_memory.db under a new table
-                conn = sqlite3.connect(self.db_path)
-                conn.isolation_level = None
-                conn.execute("""
-                    CREATE TABLE IF NOT EXISTS healing_status (
-                        id INTEGER PRIMARY KEY,
-                        timestamp REAL,
-                        core_temp REAL,
-                        ram_used REAL,
-                        status_text TEXT
-                    )
-                """)
-                
-                # Status evaluation based on CPU temp
-                if temp < 55.0:
-                    status = "❄️ COOL & HEALTHY (Peak Attunement)"
-                elif temp < 70.0:
-                    status = "🔥 WARM (Active Cooling/Throttling Monitor)"
-                else:
-                    status = "🚨 HOT (Thermal Guard Active - Throttling Mode)"
+                # 2. Save stats safely using robust context manager transaction blocks
+                with sqlite3.connect(self.db_path) as conn:
+                    conn.isolation_level = None  # Autocommit
+                    conn.execute("""
+                        CREATE TABLE IF NOT EXISTS healing_status (
+                            id INTEGER PRIMARY KEY,
+                            timestamp REAL,
+                            core_temp REAL,
+                            ram_used REAL,
+                            status_text TEXT
+                        )
+                    """)
                     
-                conn.execute("""
-                    INSERT INTO healing_status (id, timestamp, core_temp, ram_used, status_text)
-                    VALUES (1, ?, ?, ?, ?)
-                    ON CONFLICT(id) DO UPDATE SET 
-                        timestamp=excluded.timestamp,
-                        core_temp=excluded.core_temp,
-                        ram_used=excluded.ram_used,
-                        status_text=excluded.status_text
-                """, (time.time(), temp, ram_used, status))
-                conn.close()
+                    if temp < 55.0:
+                        status = "❄️ COOL & HEALTHY (Peak Attunement)"
+                    elif temp < 70.0:
+                        status = "🔥 WARM (Active Cooling/Throttling Monitor)"
+                    else:
+                        status = "🚨 HOT (Thermal Guard Active - Throttling Mode)"
+                        
+                    conn.execute("""
+                        INSERT INTO healing_status (id, timestamp, core_temp, ram_used, status_text)
+                        VALUES (1, ?, ?, ?, ?)
+                        ON CONFLICT(id) DO UPDATE SET 
+                            timestamp=excluded.timestamp,
+                            core_temp=excluded.core_temp,
+                            ram_used=excluded.ram_used,
+                            status_text=excluded.status_text
+                    """, (time.time(), temp, ram_used, status))
                 
                 if junk_cleaned > 0:
-                    print(f"✅ Self-Healing: Cleaned {junk_cleaned} transient fragments from system floor.")
+                    print(f"✅ Self-Healing: Reclaimed and cleaned {junk_cleaned} transient directories/fragments.")
                     
             except Exception as e:
                 print(f"⚠️ Self-healing exception: {e}")
                 
-            # Perform system checks every 5 seconds
-            time.sleep(5)
+            # Sleep using the dynamically calibrated sleep interval
+            time.sleep(self.healing_sleep_interval)
 
 if __name__ == "__main__":
     optimizer = SystemSelfOptimizer()
