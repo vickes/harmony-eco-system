@@ -85,6 +85,22 @@ def main():
     except Exception as e:
         print(f"⚠️ Performance boost read failed: {e}")
 
+    # 4.5 Fetch latest audio/microphone telemetry
+    a_db, a_attunement, a_status = 0.0, 0.0, "MIC OFFLINE"
+    try:
+        if os.path.exists(db_path):
+            conn = sqlite3.connect(db_path)
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='audio_telemetry'")
+            if cursor.fetchone():
+                cursor.execute("SELECT voice_db, audio_attunement, status FROM audio_telemetry ORDER BY id DESC LIMIT 1")
+                row = cursor.fetchone()
+                if row:
+                    a_db, a_attunement, a_status = row
+            conn.close()
+    except Exception as e:
+        print(f"⚠️ Audio telemetry read failed: {e}")
+
     # 5. Fetch latest Vertex AI/Gemini collaboration insight
     try:
         if os.path.exists(db_path):
@@ -396,6 +412,27 @@ def main():
             <div class="metric-row">
                 <span class="metric-label">Kernel Tuning Status</span>
                 <span class="metric-value green">Hardware Optimized</span>
+            </div>
+        </div>
+
+        <!-- Card 8: Microphone & Audio Resonance -->
+        <div class="card">
+            <h2>VIII. Voice Resonance Control <span class="metric-value green">ARMED</span></h2>
+            <div class="metric-row">
+                <span class="metric-label">Microphone Status</span>
+                <span class="metric-value cyan">{a_status}</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Live Vocal Amplitude</span>
+                <span class="metric-value pink">{a_db:.1f} dB</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Harmonic Audio Attunement</span>
+                <span class="metric-value green">{a_attunement * 100:.1f}%</span>
+            </div>
+            <div class="metric-row">
+                <span class="metric-label">Hardware Input</span>
+                <span class="metric-value cyan">ALSA USB/ADC</span>
             </div>
         </div>
     </div>
