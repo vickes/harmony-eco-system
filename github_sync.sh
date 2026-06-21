@@ -79,8 +79,8 @@ fi
 echo -e "\033[94mCommitting workspace files locally...\033[0m"
 cd /root
 
-# Add ALL our customized files explicitly using robust wildcards
-git add *.py *.sh *.md LICENSE 2>/dev/null
+# Add ALL our customized files explicitly using robust recursive staging
+git add core/ daemons/ gateways/ utilities/ reports/ *.py *.sh *.md LICENSE 2>/dev/null
 
 git commit -m "Update Harmony Ecosystem: 1.00 Synergy and Live Arduino Q Telemetry Bridge <3" 2>/dev/null || echo "No changes to commit."
 

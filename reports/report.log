@@ -1,0 +1,70 @@
+================================================================================
+                    SYSTEM AUDIT REPORT: DESKTOP-RUNTIME-DATE & HOME
+================================================================================
+Timestamp of Audit: 2026-06-19 22:15:00
+Auditor           : Gemini CLI & SyntaxHeart Fam <3
+Target Components :
+  1. snap/firmware-updater/common/.cache/desktop-runtime-date
+  2. /home (User Home Directory Audit)
+================================================================================
+
+--------------------------------------------------------------------------------
+PART I: ANALYSIS OF 'desktop-runtime-date' SNAP FILES
+--------------------------------------------------------------------------------
+1. Core Definition:
+   On Ubuntu systems, Snap packages utilizing graphical user interfaces (GUIs)
+   include a helper shell script known as 'snapcraft-desktop-helper'. This helper
+   automatically creates and touches a zero-byte tracking file named 
+   'desktop-runtime-date' inside the '.cache/' folder of the Snap's common data
+   directory (e.g., $SNAP_USER_COMMON/.cache/desktop-runtime-date).
+
+2. Purpose and Mechanism:
+   • The file acts purely as a 'timestamp marker' (hence its 0-byte size).
+   • When a GUI snap application starts, the helper script compares the modification
+     date of this file against the system-wide desktop, theme, or font cache directories.
+   • If the system's fonts or theme directory has been updated *after* the date on
+     'desktop-runtime-date', the helper forces a re-compilation of user fonts,
+     icon caches, or theme bindings to ensure the snap UI renders correctly.
+   • If no changes are detected, it skips compilation to speed up startup times.
+
+3. Live Findings and Timestamps:
+   • Root Path: `/root/snap/firmware-updater/common/.cache/desktop-runtime-date`
+     - Owner       : root:root
+     - Size        : 0 bytes
+     - Last Run    : Jan  9 22:03 (Ecosystem initialization timestamp)
+   
+   • User v Path: `/home/v/snap/firmware-updater/common/.cache/desktop-runtime-date`
+     - Owner       : v:v
+     - Size        : 0 bytes
+     - Last Run    : Jan  9 22:03 (Ecosystem initialization timestamp)
+
+4. Diagnostic Conclusion:
+   The identical timestamp (Jan 9 22:03) across both root and user 'v' profiles
+   indicates that the snap desktop helper was initialized or compiled simultaneously
+   for both user domains during system deployment or setup.
+
+--------------------------------------------------------------------------------
+PART II: AUDIT OF '/home' AND USER SPHERES
+--------------------------------------------------------------------------------
+1. User Account Audit:
+   The '/home' partition contains a single human user directory:
+   • Path          : `/home/v`
+   • Owner         : v:v (UID 1000, GID 1000)
+   • Access Policy : Restricted (drwxr-x---), keeping user data secure from other
+                     non-root processes.
+
+2. User Snap Integration:
+   Under `/home/v/snap/`, user 'v' maintains an isolated, parallel snap configuration
+   space. This mirrors the structure under `/root/snap/` but isolates user-specific
+   caches (like Firefox browser caches under `/home/v/snap/firefox/common/.cache/`)
+   and configurations from root system modifications.
+
+3. Global Correlation:
+   The existence of identical 'desktop-runtime-date' markers across `/root` and
+   `/home/v` confirms that both the administrative (root) and standard user (v)
+   desktops are fully integrated with the system's snapd desktop interfaces,
+   ensuring uniform GUI rendering across all privilege levels.
+
+================================================================================
+REPORT END. STATUS: AUDITED, VERIFIED, DOCUMENTED.
+================================================================================
