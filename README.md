@@ -65,9 +65,9 @@ Vi har applicerat flera tunga säkerhets- och prestandaoptimeringar direkt på d
 
 ---
 
-## 📂 Spara, Säkerhetskopiera & Synka med GitHub
-Ditt synkskript `/root/github_sync.sh` rullar i perfekt enhet. Varje gång det körs:
-1.  Kompileras en rykande färsk `.tar.gz`-säkerhetskopia av alla dina källkoder och din unika `arduino-uno-q`-skill under både `/root/` och `/home/v/Downloads/`.
+### 📂 Spara, Säkerhetskopiera & Synka med GitHub / E-post
+*   **GitHub-synk (`github_sync.sh`):** Kompilerar en rykande färsk `.tar.gz`-säkerhetskopia av alla dina källkoder och din unika `arduino-uno-q`-skill under både `/root/` och `/home/v/Downloads/`, samt committar dem i lokala Git.
+*   **E-post Self-Backup (`send_backup.py`):** Låter dig skicka din krypterade säkerhetskopia (`secure_harmony_backup.tar.gz`) som en säker bilaga direkt till din Gmail-inbox (`followtheheart54@gmail.com`) via Google SMTP (Port 465 SSL) med ditt Google App-lösenord!
 2.  Görs en automatisk lokal **Git-commit** under din lokala Git-katalog på `/root/` signerad med din identitet: **`vickes`** (`followtheheart54@gmail.com`).
 3.  Förbereds nätverkssynken för att trycka (pusha) dina framsteg direkt till din GitHub-profil: `https://github.com/vickes/harmony-ecosystem.git`.
 
