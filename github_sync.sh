@@ -45,10 +45,15 @@ cp -p /root/simulate_alpha_1000.py "$BACKUP_DIR/"
 cp -p /root/ares_partner_portal.py "$BACKUP_DIR/"
 cp -p /root/send_backup.py "$BACKUP_DIR/"
 cp -p /root/organize_workspace.py "$BACKUP_DIR/"
+cp -p /root/ares_voice_trigger.py "$BACKUP_DIR/" 2>/dev/null || cp -p /root/daemons/ares_voice_trigger.py "$BACKUP_DIR/"
 cp -p /root/ARES_Kombinerad_Evolution_Spec.md "$BACKUP_DIR/"
 cp -p /root/README.md "$BACKUP_DIR/"
 cp -p /root/LICENSE "$BACKUP_DIR/"
 cp -p /etc/sysctl.d/99-performance-optimization.conf "$BACKUP_DIR/"
+
+# Copy systemd service configurations
+mkdir -p "$BACKUP_DIR/systemd"
+cp -p /root/daemons/eskil-*.service "$BACKUP_DIR/systemd/" 2>/dev/null
 
 # Copy custom arduino-uno-q skill
 mkdir -p "$BACKUP_DIR/skills"

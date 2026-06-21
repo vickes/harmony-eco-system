@@ -1,0 +1,13 @@
+[Unit]
+Description=ARES Voice Trigger Daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /root/daemons/ares_voice_trigger.py
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target

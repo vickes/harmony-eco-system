@@ -1,0 +1,13 @@
+[Unit]
+Description=ARES Eskil Self-Healing & Thermal Guardian
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /root/daemons/ares_self_optimizer.py
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target

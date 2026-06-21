@@ -1,0 +1,13 @@
+[Unit]
+Description=ARES LoveCode Live Learning Daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /root/daemons/lovecode_live_learning.py
+Restart=always
+RestartSec=10
+User=root
+
+[Install]
+WantedBy=multi-user.target

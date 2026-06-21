@@ -1,0 +1,13 @@
+[Unit]
+Description=ARES Sound-Reactive LED Bar Controller
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /root/daemons/uno_q_led_controller.py
+Restart=always
+RestartSec=5
+User=root
+
+[Install]
+WantedBy=multi-user.target
