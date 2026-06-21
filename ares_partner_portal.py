@@ -50,9 +50,9 @@ class AIPartnerPortal:
         """Uses fswebcam to capture a frame from the USB HD Camera."""
         print("👁️  [AI Partner] Opening Generic HD Camera (/dev/video0)...")
         try:
-            # -r: resolution, --no-banner: disable timestamp banner on image
+            # -r: resolution, -S 20: skip first 20 frames for sensor exposure warm-up, --no-banner: disable banner
             res = subprocess.run(
-                ["fswebcam", "-r", "1280x720", "--no-banner", self.image_path],
+                ["fswebcam", "-r", "1280x720", "-S", "20", "--no-banner", self.image_path],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True
