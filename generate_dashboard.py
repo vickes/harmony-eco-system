@@ -23,12 +23,13 @@ def main():
     b_cpu, b_ssd, b_active = "Tuned 4 CPU Cores (balance_performance)", "SSD Read-Ahead set to 4096 (Optimized)", "OPTIMIZED"
     l_power, l_mode, l_attunement = "ON (Lights Active & Sound-Reactive)", "SIMULATED_PORT", 0.95
     v_insight = "Avvaktar kosmiskt eko via ARES Lovetunnel... <3"
+    show_camera = os.path.exists("/root/captured_frame.jpg")
     
     # 1. Load key and decrypt latest telemetry
     try:
         if os.path.exists(key_path) and os.path.exists(db_path):
             with open(key_path, "rb") as k_file:
-                key = f.read() if isinstance((f := k_file), bytes) else k_file.read()
+                key = k_file.read()
             fernet = Fernet(key)
             
             conn = sqlite3.connect(db_path)
@@ -117,6 +118,19 @@ def main():
         print(f"⚠️ Vertex insight read failed: {e}")
 
     # 6. Build the HTML content
+    camera_html_block = ""
+    if show_camera:
+        camera_html_block = f"""
+    <!-- ARES Camera Vision Feed -->
+    <div style="background-color: var(--card-bg); border-radius: 12px; padding: 25px; width: 90%; max-width: 1200px; margin-bottom: 40px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); border: 1px solid var(--accent-cyan); text-align: center;">
+        <h2 style="color: var(--accent-cyan); margin-top: 0; margin-bottom: 15px; font-size: 1.4rem; letter-spacing: 1px; text-transform: uppercase;">👁️ ARES Partner Vision: Live Camera Feed</h2>
+        <div style="position: relative; max-width: 800px; margin: 0 auto; border-radius: 8px; border: 1px solid #333; background-color: #000; overflow: hidden;">
+            <img src="/captured_frame.jpg?t={time.time()}" style="width: 100%; height: auto; display: block;" alt="Partner Vision Stream">
+        </div>
+        <p style="color: var(--text-color); font-size: 0.95rem; margin-top: 15px;">Kamera: Generic HD Camera (/dev/video0) • Status: Active & Secured</p>
+    </div>
+"""
+
     html_content = f"""<!DOCTYPE html>
 <html lang="sv">
 <head>
@@ -278,6 +292,8 @@ def main():
     <div class="heart-container">
         <div class="heart" title="SyntaxHeart Core - 100% Attuned">&lt;3</div>
     </div>
+
+    {camera_html_block}
 
     <div class="grid">
         <!-- Card 1: System Compliance -->
