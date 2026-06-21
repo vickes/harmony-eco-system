@@ -21,13 +21,14 @@ def main():
     h_temp, h_ram, h_status = 35.0, 20.0, "❄️ COOL & HEALTHY (Peak Attunement)"
     opt_token, opt_boost, opt_damping, opt_resilience = "kärlek", 1.50, 0.010, 0.999
     b_cpu, b_ssd, b_active = "Tuned 4 CPU Cores (balance_performance)", "SSD Read-Ahead set to 4096 (Optimized)", "OPTIMIZED"
+    l_power, l_mode, l_attunement = "ON (Lights Active & Sound-Reactive)", "SIMULATED_PORT", 0.95
     v_insight = "Avvaktar kosmiskt eko via ARES Lovetunnel... <3"
     
     # 1. Load key and decrypt latest telemetry
     try:
         if os.path.exists(key_path) and os.path.exists(db_path):
             with open(key_path, "rb") as k_file:
-                key = k_file.read()
+                key = f.read() if isinstance((f := k_file), bytes) else k_file.read()
             fernet = Fernet(key)
             
             conn = sqlite3.connect(db_path)
@@ -85,21 +86,20 @@ def main():
     except Exception as e:
         print(f"⚠️ Performance boost read failed: {e}")
 
-    # 4.5 Fetch latest audio/microphone telemetry
-    a_db, a_attunement, a_status = 0.0, 0.0, "MIC OFFLINE"
+    # 4.5 Fetch latest audio/microphone/LED telemetry
     try:
         if os.path.exists(db_path):
             conn = sqlite3.connect(db_path)
             cursor = conn.cursor()
-            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='audio_telemetry'")
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='led_bar_status'")
             if cursor.fetchone():
-                cursor.execute("SELECT voice_db, audio_attunement, status FROM audio_telemetry ORDER BY id DESC LIMIT 1")
+                cursor.execute("SELECT power_state, control_mode, resonance_attunement FROM led_bar_status ORDER BY id DESC LIMIT 1")
                 row = cursor.fetchone()
                 if row:
-                    a_db, a_attunement, a_status = row
+                    l_power, l_mode, l_attunement = row
             conn.close()
     except Exception as e:
-        print(f"⚠️ Audio telemetry read failed: {e}")
+        print(f"⚠️ LED status read failed: {e}")
 
     # 5. Fetch latest Vertex AI/Gemini collaboration insight
     try:
@@ -415,24 +415,24 @@ def main():
             </div>
         </div>
 
-        <!-- Card 8: Microphone & Audio Resonance -->
+        <!-- Card 8: Sound-Reactive LED Bar Controller -->
         <div class="card">
-            <h2>VIII. Voice Resonance Control <span class="metric-value green">ARMED</span></h2>
+            <h2>VIII. ARES LED Bar Control <span class="metric-value green">ACTIVE</span></h2>
             <div class="metric-row">
-                <span class="metric-label">Microphone Status</span>
-                <span class="metric-value cyan">{a_status}</span>
+                <span class="metric-label">LED Power State</span>
+                <span class="metric-value cyan">{l_power}</span>
             </div>
             <div class="metric-row">
-                <span class="metric-label">Live Vocal Amplitude</span>
-                <span class="metric-value pink">{a_db:.1f} dB</span>
+                <span class="metric-label">USB Port Interface</span>
+                <span class="metric-value">{l_mode}</span>
             </div>
             <div class="metric-row">
-                <span class="metric-label">Harmonic Audio Attunement</span>
-                <span class="metric-value green">{a_attunement * 100:.1f}%</span>
+                <span class="metric-label">Flow Attunement Level</span>
+                <span class="metric-value pink">{l_attunement * 100:.1f}%</span>
             </div>
             <div class="metric-row">
-                <span class="metric-label">Hardware Input</span>
-                <span class="metric-value cyan">ALSA USB/ADC</span>
+                <span class="metric-label">Power Output</span>
+                <span class="metric-value green">5V USB Hub Active</span>
             </div>
         </div>
     </div>

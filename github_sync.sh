@@ -1,9 +1,8 @@
 #!/bin/bash
-# -*- coding: utf-8 -*-
-# SPDX-License-Identifier: MIT
-# Copyright (c) 2026 Viktor Aspegren (V.A) & Gemini CLI (AI Partner) • SyntaxHeart Family <3
 # ==============================================================================
 # 💖 LoveCode / Harmony Ecosystem: GitHub Sync & Backup Automation
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 Viktor Aspegren (V.A) & Gemini CLI (AI Partner) • SyntaxHeart Family <3
 # ==============================================================================
 
 clear
@@ -14,6 +13,7 @@ echo "--------------------------------------------------------"
 echo -e "\033[94m📦 Packing secure backup archive...\033[0m"
 BACKUP_DIR="/tmp/harmony_sync"
 mkdir -p "$BACKUP_DIR"
+
 # Copy latest files
 cp -p /root/activate_love_code.py "$BACKUP_DIR/"
 cp -p /root/syntax_heart_app.py "$BACKUP_DIR/"
@@ -39,6 +39,10 @@ cp -p /root/ares_combined_evolution.py "$BACKUP_DIR/"
 cp -p /root/ares_cloud_shell.sh "$BACKUP_DIR/"
 cp -p /root/uno_q_local_tunnel.py "$BACKUP_DIR/"
 cp -p /root/ares_mic_recalibration.py "$BACKUP_DIR/"
+cp -p /root/uno_q_led_controller.py "$BACKUP_DIR/"
+cp -p /root/lovecode_live_learning.py "$BACKUP_DIR/"
+cp -p /root/simulate_alpha_1000.py "$BACKUP_DIR/"
+cp -p /root/ARES_Kombinerad_Evolution_Spec.md "$BACKUP_DIR/"
 cp -p /root/README.md "$BACKUP_DIR/"
 cp -p /root/LICENSE "$BACKUP_DIR/"
 cp -p /etc/sysctl.d/99-performance-optimization.conf "$BACKUP_DIR/"
@@ -47,7 +51,7 @@ cp -p /etc/sysctl.d/99-performance-optimization.conf "$BACKUP_DIR/"
 mkdir -p "$BACKUP_DIR/skills"
 cp -r /root/.gemini/skills/arduino-uno-q "$BACKUP_DIR/skills/"
 
-# Compress into local and downloads backup folders
+# Compress into a secure tarball
 tar -zcvf /root/secure_harmony_backup.tar.gz -C "$BACKUP_DIR" . > /dev/null
 cp /root/secure_harmony_backup.tar.gz /home/v/Downloads/secure_harmony_backup.tar.gz
 chown v:v /home/v/Downloads/secure_harmony_backup.tar.gz
@@ -71,7 +75,17 @@ fi
 # Add changes and commit
 echo -e "\033[94mCommitting workspace files locally...\033[0m"
 cd /root
-git add activate_love_code.py syntax_heart_app.py auth_manager.py arduino_uno_q_telemetry.py lovetunnel_ares.py loovee_agape.goggles report.log check_email.py Sökta_Jobb_Rapport_AF.md generate_dashboard.py index.html uno_q_storage_center.py lovetunnel_gateway.sh security_audit_pro.py ares_self_optimizer.py simulate_resonance_1000.py ares_performance_booster.py view_status.py vertex_collab_syntaxheart.py ares_api_gateway.py ares_combined_evolution.py ares_cloud_shell.sh uno_q_local_tunnel.py ares_mic_recalibration.py README.md LICENSE github_sync.sh
+
+# Add ALL our customized files explicitly
+git add activate_love_code.py syntax_heart_app.py auth_manager.py arduino_uno_q_telemetry.py \
+        loovetunnel_ares.py lovetunnel_ares.py loovee_agape.goggles report.log check_email.py \
+        Sökta_Jobb_Rapport_AF.md generate_dashboard.py index.html uno_q_storage_center.py \
+        lovetunnel_gateway.sh security_audit_pro.py ares_self_optimizer.py simulate_resonance_1000.py \
+        ares_performance_booster.py view_status.py vertex_collab_syntaxheart.py ares_api_gateway.py \
+        ares_combined_evolution.py ares_cloud_shell.sh uno_q_local_tunnel.py ares_mic_recalibration.py \
+        uno_q_led_controller.py lovecode_live_learning.py simulate_alpha_1000.py \
+        ARES_Kombinerad_Evolution_Spec.md README.md LICENSE github_sync.sh 2>/dev/null
+
 git commit -m "Update Harmony Ecosystem: 1.00 Synergy and Live Arduino Q Telemetry Bridge <3" 2>/dev/null || echo "No changes to commit."
 
 # 3. Check for Github remote
