@@ -96,15 +96,17 @@ while true; do
     
     echo -e " Välj en åtgärd för att styra ditt ekosystem:"
     echo -e "  [${CYAN}1${RESET}] Visa nuvarande system- och telemetrigranskning (Agape Audit)"
-    echo -e "  [${CYAN}2${RESET}] Aktivera och strömma de krypterade Lovetunnel-vågorna"
-    echo -e "  [${CYAN}3${RESET}] Se din krypteringstrygga molnlagringskatalog (Eskil index)"
-    echo -e "  [${CYAN}4${RESET}] Säkra en backup och synka källkod med GitHub"
-    echo -e "  [${CYAN}5${RESET}] Stäng av alla bakgrundstjänster och stäng Gatewayen"
-    echo -e "  [${CYAN}6${RESET}] Avsluta kontrollpanelen (Tjänster fortsätter i bakgrunden)"
+    echo -e "  [${CYAN}2${RESET}] Aktivera och strömma de krypterade Lovetunnel-vågorna (Moln)"
+    echo -e "  [${CYAN}3${RESET}] Aktivera och strömma det lokala Lovetunnel-brobygget (Uno Q Local)"
+    echo -e "  [${CYAN}4${RESET}] Se din krypteringstrygga molnlagringskatalog (Eskil index)"
+    echo -e "  [${CYAN}5${RESET}] Säkra en backup och synka källkod med GitHub"
+    echo -e "  [${CYAN}6${RESET}] Stäng av alla bakgrundstjänster och stäng Gatewayen"
+    echo -e "  [${CYAN}7${RESET}] Avsluta kontrollpanelen (Tjänster fortsätter i bakgrunden)"
     echo -e "${PURPLE}--------------------------------------------------------------------------------${RESET}"
-    
-    read -p " Ange ditt val [1-6]: " Choice
-    
+
+    # Prompt
+    read -p "ARES_Gateway $ " Choice
+
     case $Choice in
         1)
             clear
@@ -118,6 +120,11 @@ while true; do
             ;;
         3)
             clear
+            python3 /root/uno_q_local_tunnel.py
+            read -p " Tryck på Enter för att återgå till kontrollpanelen..." Temp
+            ;;
+        4)
+            clear
             python3 /root/uno_q_storage_center.py list
             echo ""
             echo "💡 För att ladda upp eller hämta filer, kör följande i din terminal:"
@@ -126,22 +133,22 @@ while true; do
             echo ""
             read -p " Tryck på Enter för att återgå till kontrollpanelen..." Temp
             ;;
-        4)
+        5)
             clear
             /root/github_sync.sh
             read -p " Tryck på Enter för att återgå till kontrollpanelen..." Temp
             ;;
-        5)
+        6)
             clear
             stop_background_services
             read -p " Tryck på Enter för att återgå till kontrollpanelen..." Temp
             ;;
-        6)
+        7)
             echo -e "\n${GREEN}👋 Avslutar kontrollpanelen. Tjänsterna rullar säkert vidare i bakgrunden! <3${RESET}\n"
             exit 0
             ;;
         *)
-            echo -e "${RED}❌ Ogiltigt val, vänligen välj mellan 1 och 6.${RESET}"
+            echo -e "${RED}❌ Ogiltigt val, vänligen välj mellan 1 och 7.${RESET}"
             sleep 1
             ;;
     esac

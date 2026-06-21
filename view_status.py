@@ -82,10 +82,10 @@ def main():
                 cursor.execute("SELECT core_temp, ram_used, status_text FROM healing_status ORDER BY id DESC LIMIT 1")
                 row = cursor.fetchone()
                 if row:
-                    h_temp, h_ram, h_status = row
-                    h_status_clean = h_status
+                    h_temp, h_ram, h_text = row
+                    h_status_clean = h_text
                 else:
-                    h_status = "N/A"
+                    h_text = "N/A"
             except Exception as e:
                 pass
             conn.close()

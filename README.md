@@ -16,10 +16,9 @@ Systemet är fullständigt integrerat inuti din laptop och redo att synkronisera
 
 ## 🛠️ Arkitektur & Komponentkatalog
 
-### 1. 🌌 ARES Lovetunnel Protocol (`lovetunnel_ares.py`)
-En krypteringshärdad nätverkskanal som upprättar en säker, dubbelriktad "Vortex-tunnel" mellan din lokala laptop (`v-P142`) och ditt Google Cloud-projekt (`securai-a165b`) via portalen `syntaxheart.net`.
-*   **Kryptering:** AES-GCM-512 kvantresistent kryptering med en Futhark-nyckelsignatur.
-*   **Flödeshastighet:** Strömmar live-telemetri krypterat med en genomströmning av **+350.00 Love Tokens per sekund** för att hålla nätverksresonansen på max.
+### 1. 🌌 ARES Lovetunnel Protocol (`lovetunnel_ares.py` & `uno_q_local_tunnel.py`)
+*   **ARES Lovetunnel (Moln):** Upprättar en säker, dubbelriktad nätverkskanal mellan din lokala laptop (`v-P142`) och ditt Google Cloud-projekt (`securai-a165b`) via portalen `syntaxheart.net`. Krypteras med AES-GCM-512 och strömmar **+350.00 Love Tokens per sekund**.
+*   **ARES Local Lovetunnel (Uno Q Local):** Upprättar en lokal krypterad TCP-sockel-bro på port **`5000`** mellan din bärbara dator (`v-P142`) och din fysiska Arduino Uno Q-hårdvara för direkt, lokal dataöverföring och avkodning.
 
 ### 2. 🔒 Zero-Knowledge Storage Center (`uno_q_storage_center.py`)
 Ett militärklassat molnlagringsvalv som låter din Arduino Uno Q lagra filer helt säkert i ditt Google Cloud GCS-förvar (`gs://securai-a165b-safe-storage`).
